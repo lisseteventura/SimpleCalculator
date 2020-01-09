@@ -23,12 +23,21 @@ keys.addEventListener("click", e => {
       action === "multiply" ||
       action === "divide"
     ) {
+      const firstValue = calculator.dataset.firstValue;
+      const operator = calculator.dataset.operator;
+      const secondValue = displayedNum;
+
+      //It's sufficient to check for firstValue and operator because secondValue always exists
+      if (firstValue && operator && previousKeyType !== "operator") {
+        display.textContent = calculate(firstValue, operator, secondValue);
+      }
       key.classList.add("is-depressed");
       //custom attribute use to update display to clicked key
       calculator.dataset.previousKeyType = "operator";
       calculator.dataset.firstValue = displayedNum;
       calculator.dataset.operator = action;
     }
+
     if (action === "decimal") {
       if (!displayedNum.includes(".")) {
         display.textContent = displayedNum + ".";
@@ -37,14 +46,18 @@ keys.addEventListener("click", e => {
       }
       calculator.dataset.previousKeyType = "decimal";
     }
+
     if (action === "clear") {
       console.log("clear key");
       calculator.dataset.previousKeyType = "clear";
     }
+
     if (action === "calculate") {
       console.log("equal key");
       calculator.dataset.previousKeyType = "calculate";
+      display.textContent = calculate(firstValue, operator, secondValue);
     }
+
     /* If the calculator shows 0, we want to replace the
     calculator’s display with the clicked key. */
     if (!action) {
@@ -62,6 +75,7 @@ keys.addEventListener("click", e => {
     Array.from(key.parentNode.children).forEach(k =>
       k.classList.remove("is-depressed")
     );
+
     if (!action) {
       if (displayedNum === "0" || previousKeyType === "operator") {
         display.textContent = keyContent;
@@ -69,13 +83,7 @@ keys.addEventListener("click", e => {
         display.textContent = displayedNum + keyContent;
       }
     }
-    if (action === "calculate") {
-      const firstValue = calculator.dataset.firstValue;
-      const operator = calculator.dataset.operator;
-      const secondValue = displayedNum;
 
-      display.textContent = calculate(firstValue, operator, secondValue);
-    }
     const calculate = (n1, operator, n2) => {
       let result = "";
 
