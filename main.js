@@ -10,6 +10,10 @@ class Calculator {
     this.operation = undefined;
   }
 
+  delete() {
+    this.currentOperand = this.currentOperand.toString().slice(0, -1);
+  }
+
   appendNumber(number) {
     if (number === "." && this.currentOperand.includes(".")) return;
     //we want our numbers to be appended not added, which is why toString is included
@@ -89,5 +93,15 @@ operationButtons.forEach(button => {
 
 equalsButton.addEventListener("click", button => {
   calculator.compute();
+  calculator.updateDisplay();
+});
+
+allClearButton.addEventListener("click", button => {
+  calculator.clear();
+  calculator.updateDisplay();
+});
+
+deleteButton.addEventListener("click", button => {
+  calculator.delete();
   calculator.updateDisplay();
 });
